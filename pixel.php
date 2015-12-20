@@ -1,9 +1,31 @@
 <?php
 
 $file = 'trackfile.txt';
+
+require_once('BrowserDetection.php');
+$browser = new BrowserDetection();
+$userBrowserName = $browser->getBrowser();
+$userBrowserVer = $browser->getVersion();
+$userPlatform = $browser->getPlatform();
+$device="Desktop";if ($browser->isMobile()) {$device="Mobile";}
+$userAgent = $string = str_replace(',', ';', $_SERVER['HTTP_USER_AGENT']);
+
+/*
+if ($userBrowserName == BrowserDetection::BROWSER_FIREFOX && $browser->compareVersions($userBrowserVer, '5.0.1') !== 1) {
+    echo 'You have FireFox version 5.0.1 or greater. ';
+}
+echo 'You are using ', $userBrowserName, ' ', $userBrowserVer, '.';
+*/
+
+//http://www.geoplugin.net/
+require_once('ip_info.php');
+$country=ip_info($_SERVER['HTTP_X_FORWARDED_FOR'], "Country");
+$state=ip_info($_SERVER['HTTP_X_FORWARDED_FOR'], "State");
+$town=ip_info($_SERVER['HTTP_X_FORWARDED_FOR'], "City");
+
 // Prints date, month, year, time, AM or PM
 //Use 45 bytes in DB to keep IPv6 with notation v4
-$person = date("d-M-Y h:i:sA").",".$_SERVER['HTTP_CLIENT_IP'].",".$_SERVER['HTTP_X_FORWARDED_FOR'].",".$_SERVER['REMOTE_ADDR']."\n";
+$person = date("d-M-Y h:i:sA").",".$_SERVER['HTTP_CLIENT_IP'].",".$_SERVER['HTTP_X_FORWARDED_FOR'].",".$_SERVER['REMOTE_ADDR'].",".$userBrowserName.",".$userBrowserVer.",".$userPlatform.",".$device.",".$userAgent.",".$country.",".$state.",".$town."\n";
 file_put_contents($file, $person, FILE_APPEND | LOCK_EX);
 
 //header('Content-Type: image/gif');
