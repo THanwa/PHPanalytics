@@ -1,3 +1,3 @@
 # PHPanalytics
 
-Example for google analytics is and custom pup tracking
+Example for google analytics and custom php tracking
